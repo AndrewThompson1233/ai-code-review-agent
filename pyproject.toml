@@ -1,0 +1,119 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ai-code-review-agent"
+version = "0.1.0"
+description = "AI agent that reviews Git diffs and GitHub Pull Requests and finds real defects."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+authors = [{ name = "assasino15555-star" }]
+keywords = ["code-review", "ai", "llm", "github", "static-analysis", "security"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+    "httpx>=0.27",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "typer>=0.12",
+    "rich>=13.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+
+[project.scripts]
+ai-review = "ai_code_review.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/assasino15555-star/ai-code-review-agent"
+Repository = "https://github.com/assasino15555-star/ai-code-review-agent"
+Issues = "https://github.com/assasino15555-star/ai-code-review-agent/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ai_code_review"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/ai_code_review/output" = "ai_code_review/output"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # isort
+    "B",        # bugbear
+    "UP",       # pyupgrade
+    "C4",       # comprehensions
+    "SIM",      # simplify
+    "RUF",      # ruff-specific
+    "PL",       # pylint
+    "PTH",      # use pathlib
+    "ASYNC",    # async linting
+    "S",        # bandit security
+    "A",        # builtin shadowing
+]
+ignore = [
+    "E501",     # line length handled by formatter
+    "PLR0913",  # too many args - acceptable for domain code
+    "PLR2004",  # magic values in tests
+    "S603",     # subprocess - we always pass an explicit argv list, no shell
+    "S607",     # partial path for system binary (git)
+    "B008",     # function call in default arg (typer uses this)
+    "SIM108",   # ternary vs if/else (readability)
+    "PLR0912",  # too many branches
+    "PLR0915",  # too many statements
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "PLR", "C901", "PLC0415", "B017", "S101"]
+"src/ai_code_review/cli/__init__.py" = ["B008"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+files = ["src/ai_code_review"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = ["-ra", "--strict-markers", "--strict-config"]
+filterwarnings = ["error::DeprecationWarning:ai_code_review.*"]
+
+[tool.coverage.run]
+source = ["src/ai_code_review"]
+branch = true

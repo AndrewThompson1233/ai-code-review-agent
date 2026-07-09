@@ -1,0 +1,67 @@
+name: AI Code Review
+
+# Trigger on PRs opened against internal branches. Pull requests from forks
+# run with a read-only token and are skipped for posting (see job guard);
+# this is intentional and documented in the README, because the only safe way
+# to allow `pull_request` from forks AND post comments is to use
+# `pull_request_target`, which hands the workflow a write token for code that
+# has NOT been checked out — a well-known and dangerous foot-gun.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    # Only run on PRs opened by the repo itself. Forks cannot receive an
+    # automated review without `pull_request_target`, which we deliberately
+    # do not use for security reasons (see README → Security notes).
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # We need full history to compute a real diff against the base.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install agent
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Run review
+        env:
+          AI_PROVIDER: ${{ vars.AI_PROVIDER || 'openai' }}
+          AI_MODEL: ${{ vars.AI_MODEL }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: ${{ vars.AI_BASE_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REVIEW_MIN_CONFIDENCE: ${{ vars.REVIEW_MIN_CONFIDENCE || '0.7' }}
+          REVIEW_MAX_FILES: ${{ vars.REVIEW_MAX_FILES || '50' }}
+          REVIEW_CONCURRENCY: ${{ vars.REVIEW_CONCURRENCY || '3' }}
+          REVIEW_TIMEOUT: ${{ vars.REVIEW_TIMEOUT || '300' }}
+        # Exit-code policy (see CLI --help):
+        #   0 — analysis succeeded (with or without findings)
+        #   1 — operational failure (config / git / provider / github)
+        #   2 — findings found AND --fail-on-issues was set (we don't set it)
+        # We deliberately do NOT pass --fail-on-issues: a successful review
+        # that finds issues should NOT turn the workflow red. Operational
+        # failures (exit 1) still fail the job.
+        run: |
+          ai-review review \
+            --base origin/${{ github.event.pull_request.base.ref }} \
+            --head ${{ github.event.pull_request.head.sha }} \
+            --pr "${{ github.repository }}#${{ github.event.pull_request.number }}" \
+            --format text
