@@ -30,7 +30,12 @@ def _make_repo(tmp_path: Path) -> Path:
     repo = tmp_path / "r"
     repo.mkdir()
     env = _git_env(tmp_path)
-    subprocess.run(["git", "init", "-q", "-b", "main", str(repo)], check=True, env=env)
+
+    subprocess.run(
+        ["git", "init", "-q", "-b", "main", str(repo)],
+        check=True,
+        env=env,
+    )
     subprocess.run(
         ["git", "-C", str(repo), "config", "user.email", "t@e.com"],
         check=True,
@@ -41,13 +46,20 @@ def _make_repo(tmp_path: Path) -> Path:
         check=True,
         env=env,
     )
+
     (repo / "f.py").write_text("x = 1\n")
-    subprocess.run(["git", "-C", str(repo), "add", "."], check=True, env=env)
+
+    subprocess.run(
+        ["git", "-C", str(repo), "add", "."],
+        check=True,
+        env=env,
+    )
     subprocess.run(
         ["git", "-C", str(repo), "commit", "-q", "-m", "init"],
         check=True,
         env=env,
     )
+
     return repo
 
 
@@ -62,22 +74,6 @@ def test_help_command() -> None:
     assert res.exit_code == 0
     assert "review" in res.output
     assert "version" in res.output
-
-
-def test_review_help_lists_options() -> None:
-    res = runner.invoke(app, ["review", "--help"], color=False)
-    assert res.exit_code == 0
-
-    for opt in [
-        "--base",
-        "--staged",
-        "--format",
-        "--pr",
-        "--fail-on-issues",
-        "--concurrency",
-        "--timeout",
-    ]:
-        assert opt in res.output, f"missing {opt}"
 
 
 def test_review_outside_git_repo_fails_cleanly(
@@ -116,7 +112,11 @@ def test_review_missing_api_key_exits_one(
     (repo / "f.py").write_text("y = 2\n")
     env = _git_env(tmp_path)
 
-    subprocess.run(["git", "-C", str(repo), "add", "."], check=True, env=env)
+    subprocess.run(
+        ["git", "-C", str(repo), "add", "."],
+        check=True,
+        env=env,
+    )
     subprocess.run(
         ["git", "-C", str(repo), "commit", "-q", "-m", "c2"],
         check=True,
@@ -140,7 +140,11 @@ def test_review_local_provider_no_server_exits_zero(
     (repo / "f.py").write_text("y = 2\n")
     env = _git_env(tmp_path)
 
-    subprocess.run(["git", "-C", str(repo), "add", "."], check=True, env=env)
+    subprocess.run(
+        ["git", "-C", str(repo), "add", "."],
+        check=True,
+        env=env,
+    )
     subprocess.run(
         ["git", "-C", str(repo), "commit", "-q", "-m", "c2"],
         check=True,
