@@ -173,7 +173,7 @@ class ReviewPipeline:
         """Review one file. Returns (issues, success).
 
         `success=False` means the file's analysis is incomplete (e.g. every
-        chunk failed to parse) — distinct from "analyzed, found nothing".
+        chunk failed to parse) - distinct from "analyzed, found nothing".
         """
         chunks = chunk_file(file_diff)
         if not chunks:
@@ -224,7 +224,7 @@ class ReviewPipeline:
 
         Retry is triggered ONLY by a parse failure (malformed JSON, invalid
         schema). Provider transport errors (4xx/5xx/timeout) are handled
-        inside the provider's own retry loop — they bubble up here only when
+        inside the provider's own retry loop - they bubble up here only when
         unrecoverable, and we do NOT retry them at this layer.
         """
         last_err: ParseError | None = None

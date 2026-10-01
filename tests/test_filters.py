@@ -72,9 +72,9 @@ def test_anchor_drops_offline_lines() -> None:
     files = [FileDiff(path="a.py", added_lines=[5, 6, 7])]
     issues = [
         _issue("a.py", 5, 0.9),
-        _issue("a.py", 4, 0.9),  # neighbor of 5 — kept
-        _issue("a.py", 100, 0.9),  # far away — dropped
-        _issue("missing.py", 1, 0.9),  # not in diff — dropped
+        _issue("a.py", 4, 0.9),  # neighbor of 5 - kept
+        _issue("a.py", 100, 0.9),  # far away - dropped
+        _issue("missing.py", 1, 0.9),  # not in diff - dropped
     ]
     out = anchor_to_diff(issues, files)
     assert {i.line for i in out} == {4, 5}

@@ -5,7 +5,7 @@ name: AI Code Review
 # this is intentional and documented in the README, because the only safe way
 # to allow `pull_request` from forks AND post comments is to use
 # `pull_request_target`, which hands the workflow a write token for code that
-# has NOT been checked out — a well-known and dangerous foot-gun.
+# has NOT been checked out - a well-known and dangerous foot-gun.
 
 on:
   pull_request:
@@ -53,9 +53,9 @@ jobs:
           REVIEW_CONCURRENCY: ${{ vars.REVIEW_CONCURRENCY || '3' }}
           REVIEW_TIMEOUT: ${{ vars.REVIEW_TIMEOUT || '300' }}
         # Exit-code policy (see CLI --help):
-        #   0 — analysis succeeded (with or without findings)
-        #   1 — operational failure (config / git / provider / github)
-        #   2 — findings found AND --fail-on-issues was set (we don't set it)
+        #   0 - analysis succeeded (with or without findings)
+        #   1 - operational failure (config / git / provider / github)
+        #   2 - findings found AND --fail-on-issues was set (we don't set it)
         # We deliberately do NOT pass --fail-on-issues: a successful review
         # that finds issues should NOT turn the workflow red. Operational
         # failures (exit 1) still fail the job.

@@ -122,7 +122,7 @@ def load_settings(
 ) -> Settings:
     """Load settings, optionally pointing at a specific .env path.
 
-    Only the overrides the CLI actually needs are exposed — passing a dict of
+    Only the overrides the CLI actually needs are exposed - passing a dict of
     arbitrary kwargs would defeat pydantic-settings' field validation.
     """
     kwargs: dict[str, object] = {}

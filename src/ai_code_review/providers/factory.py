@@ -14,7 +14,7 @@ def build_provider(settings: Settings, *, api_key: str | None = None) -> LLMProv
     OpenAI-compatible local server. Anthropic gets its own client because its
     API differs enough (system prompt handling, content blocks) to warrant a
     dedicated implementation. Azure OpenAI is intentionally NOT supported
-    here — see OpenAIProvider's docstring.
+    here - see OpenAIProvider's docstring.
     """
     name = settings.ai_provider
     if name in {"openai", "local"}:

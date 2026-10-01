@@ -76,7 +76,7 @@ async def publish_review(
     Resilience strategy:
       1. Try to post the review with all inline comments at once.
       2. If GitHub rejects (e.g. one comment anchors to a line not in the
-         diff's RIGHT side), retry with inline comments stripped — move the
+         diff's RIGHT side), retry with inline comments stripped - move the
          lost findings into the summary body instead of dropping the whole
          review.
       3. If that also fails, post a summary-only review so the user still
@@ -87,7 +87,7 @@ async def publish_review(
     that have already appeared.
     """
     if not result.issues and not result.summary:
-        log.info("no issues and no summary — skipping review post")
+        log.info("no issues and no summary - skipping review post")
         return None
 
     seen_fps: set[str] = set()
@@ -102,7 +102,7 @@ async def publish_review(
 
     new_issues = [i for i in result.issues if i.fingerprint not in seen_fps]
     if not new_issues and not result.summary:
-        log.info("all findings already posted — nothing new to publish")
+        log.info("all findings already posted - nothing new to publish")
         return None
 
     inline_issues = [i for i in new_issues if i.line >= 1 and i.file]
@@ -158,7 +158,7 @@ def _compose_summary(base_summary: str, fallback_issues: list[ReviewIssue]) -> s
     lines = [base_summary, "", "### Findings (could not be posted inline)", ""]
     for i in fallback_issues:
         lines.append(
-            f"- **[{i.severity.value.upper()}] {i.title}** — `{i.file}:{i.line}` "
+            f"- **[{i.severity.value.upper()}] {i.title}** - `{i.file}:{i.line}` "
             f"(confidence: {i.confidence:.2f})"
         )
     return "\n".join(lines)

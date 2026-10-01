@@ -7,7 +7,7 @@ from ..errors import DiffError
 from ..models import FileDiff
 
 _HUNK_HEADER = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@")
-# `diff --git a/path b/path` — paths may be quoted when they contain spaces
+# `diff --git a/path b/path` - paths may be quoted when they contain spaces
 # or special chars. We accept both quoted and unquoted forms.
 _FILE_HEADER = re.compile(r"^diff --git a/(.+?) b/(.+)$")
 _FILE_HEADER_QUOTED = re.compile(r'^diff --git "(.+?)" "(.+?)"$')

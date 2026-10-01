@@ -9,7 +9,7 @@ class LLMProvider(Protocol):
     """Minimal contract every provider implements.
 
     `complete` takes a list of chat messages and returns the assistant's text
-    response. Structured-output parsing happens upstream — providers stay
+    response. Structured-output parsing happens upstream - providers stay
     agnostic to the review domain.
     """
 

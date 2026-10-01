@@ -21,7 +21,7 @@ def gather_context(
 
     Bounded by `review_max_context_size`: full file if it fits, otherwise a
     window of N lines around the first added hunk. We never pull in unrelated
-    files — the cost/noise tradeoff is too poor for an automated reviewer.
+    files - the cost/noise tradeoff is too poor for an automated reviewer.
     """
     if file_diff.is_new:
         return "(new file; no prior context)"

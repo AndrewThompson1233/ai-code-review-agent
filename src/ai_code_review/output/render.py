@@ -21,7 +21,7 @@ def render_text(result: ReviewResult) -> str:
     lines.append("")
     if not result.issues:
         if result.failed_files and not result.analyzed_files:
-            lines.append("WARNING: no files were analyzed successfully — review is incomplete.")
+            lines.append("WARNING: no files were analyzed successfully - review is incomplete.")
         else:
             lines.append("No issues above the confidence threshold.")
         return "\n".join(lines)

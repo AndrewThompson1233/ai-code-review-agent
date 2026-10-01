@@ -79,7 +79,7 @@ def test_matches_line_neighbor() -> None:
     i = _make(line=4)
     assert i.matches_line({5})
     assert i.matches_line({3})
-    # Two lines away — not anchored.
+    # Two lines away - not anchored.
     assert not i.matches_line({7})
 
 

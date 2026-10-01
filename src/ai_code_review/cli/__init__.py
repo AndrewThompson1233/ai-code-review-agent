@@ -119,9 +119,9 @@ def review(
     """Review local Git changes or a GitHub PR and print findings.
 
     Exit codes:
-      0 — analysis succeeded, no issues (or issues found without --fail-on-issues)
-      1 — operational failure (config/git/provider/github error, or all files failed)
-      2 — analysis succeeded AND found issues (only with --fail-on-issues)
+      0 - analysis succeeded, no issues (or issues found without --fail-on-issues)
+      1 - operational failure (config/git/provider/github error, or all files failed)
+      2 - analysis succeeded AND found issues (only with --fail-on-issues)
     """
     _setup_logging(verbose, quiet)
 
@@ -205,7 +205,7 @@ def review(
     #   - issues found → 0 by default, 2 with --fail-on-issues
     if result.failed_files and not result.analyzed_files:
         # Total failure: every eligible file failed. Bail with operational
-        # failure so CI turns red — "no issues" here would be a lie.
+        # failure so CI turns red - "no issues" here would be a lie.
         _bail(
             f"all {result.failed_count} file(s) failed analysis; see summary",
             code=EXIT_OPERATIONAL_FAILURE,
@@ -298,7 +298,7 @@ def _render_rich(result: ReviewResult) -> None:
 
     if not result.issues:
         if result.failed_files and not result.analyzed_files:
-            console.print("[red]Review incomplete — no files analyzed successfully.[/red]")
+            console.print("[red]Review incomplete - no files analyzed successfully.[/red]")
         else:
             console.print("[green]No high-confidence issues found.[/green]")
         return

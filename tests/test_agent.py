@@ -87,7 +87,7 @@ async def test_pipeline_no_files_returns_empty() -> None:
 
 
 async def test_pipeline_runs_full_flow() -> None:
-    # Issue on line 5 of a.py — a.py has added_lines [5, 6].
+    # Issue on line 5 of a.py - a.py has added_lines [5, 6].
     raw = _make_raw_issue(line=5, conf=0.9)
     provider = FakeProvider([raw])
     files = [_file("a.py", [5, 6], patch="@@ -1 +1,2 @@\n+x\n+y\n")]
@@ -277,7 +277,7 @@ def test_gitrepo_read_file_from_tree_reads_head(tmp_path: Path) -> None:
         ["git", "-C", str(repo), "commit", "-q", "-m", "add tracked"], check=True, env=env
     )
 
-    # Now dirty the worktree — read_file_from_tree must still return the committed version.
+    # Now dirty the worktree - read_file_from_tree must still return the committed version.
     (repo / "tracked.py").write_text("x = 999  # dirty worktree\n")
     g = GitRepo(repo)
     body = g.read_file_from_tree("tracked.py", "HEAD")

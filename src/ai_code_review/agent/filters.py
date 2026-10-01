@@ -27,7 +27,7 @@ def anchor_to_diff(issues: list[ReviewIssue], files: list[FileDiff]) -> list[Rev
     """Drop findings whose line doesn't fall on (or right next to) an added line.
 
     Without this filter the LLM happily reports line numbers that exist in the
-    file but were never touched by the PR — those are useless noise for an
+    file but were never touched by the PR - those are useless noise for an
     inline GitHub review.
     """
     by_path: dict[str, set[int]] = {f.path: f.added_lines_set for f in files}
